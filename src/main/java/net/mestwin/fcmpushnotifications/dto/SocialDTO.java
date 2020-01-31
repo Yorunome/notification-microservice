@@ -3,6 +3,7 @@ package net.mestwin.fcmpushnotifications.dto;
 import lombok.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -17,8 +18,8 @@ public class SocialDTO {
 //    private String applicationId;
 //    Map<String, String> innerContents;
     private String title;
-    private String message;
-    private List <String> userId;
+//    private String message;
+    private Map<String, String> userId;
     private String appId;
     private String category;
 //    private String type;

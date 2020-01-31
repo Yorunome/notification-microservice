@@ -18,6 +18,6 @@ public class UserTokens {
 
     @Id
     private String userId;
-    private List<String> FCMTokens;
+    private String FCMTokens;
 
 }
