@@ -19,7 +19,7 @@ public class SocialDTO {
 //    Map<String, String> innerContents;
     private String title;
 //    private String message;
-    private Map<String, String> userId;
+    private List<String> userId;
     private String appId;
     private String category;
 //    private String type;

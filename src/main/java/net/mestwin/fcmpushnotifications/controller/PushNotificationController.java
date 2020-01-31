@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import net.mestwin.fcmpushnotifications.dto.QuizDTO;
 import net.mestwin.fcmpushnotifications.dto.SocialDTO;
 import net.mestwin.fcmpushnotifications.entity.ContestDetails;
-import net.mestwin.fcmpushnotifications.entity.UserTokens;
+import net.mestwin.fcmpushnotifications.entity.Notification;
+import net.mestwin.fcmpushnotifications.feignclient.NotificationClient;
+import net.mestwin.fcmpushnotifications.model.FcmResponse;
 import net.mestwin.fcmpushnotifications.model.PushNotificationRequest;
 import net.mestwin.fcmpushnotifications.model.QuizRequest;
 import net.mestwin.fcmpushnotifications.service.PushNotificationService;
@@ -31,33 +33,37 @@ public class PushNotificationController {
     @Autowired
     PushNotificationService notificationService;
 
-//    @PostMapping("/add")
-//    @KafkaListener(topics = "SocialListener", groupId = "group_id")
-//    public void fbConsumer(@RequestBody String message) {
-//
-//        ObjectMapper objectMapper = new ObjectMapper();
-//        SocialDTO socialDTO = new SocialDTO();
-//        try {
-//            socialDTO = objectMapper.readValue(message, SocialDTO.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        List<String>userId = socialDTO.getUserId().entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toList());
-//        PushNotificationRequest request = new PushNotificationRequest();
-//        BeanUtils.copyProperties(socialDTO, request);
-//        UserTokens users = new UserTokens();
-////        for (int i = 0; i < users.size(); i++) {
-////            UserTokens user = new UserTokens();
-////            user.setUserId(users.get(i));
-//            List<String> tokens = new ArrayList<>();
-////            UserTokens u = (userIdRedisRepository.findTokens(user.getUserId()));
-////            tokens.addAll(u.getFCMTokens());
-////            notificationService.sendPushNotification(tokens, request);
-//            tokens.add(userId.get(0));
-//            notificationService.sendPushNotification(tokens, request);
-//
-//
-//        }
+    @Autowired
+    NotificationClient notificationClient;
+
+    @PostMapping("/add")
+    @KafkaListener(topics = "SocialListener", groupId = "group_id")
+    public void fbConsumer(@RequestBody String message) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        SocialDTO socialDTO = new SocialDTO();
+        try {
+            socialDTO = objectMapper.readValue(message, SocialDTO.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        List<String>userId = new ArrayList<>();
+        userId.addAll(socialDTO.getUserId().stream().collect(Collectors.toList()));
+        PushNotificationRequest request = new PushNotificationRequest();
+        BeanUtils.copyProperties(socialDTO, request);
+
+        List<String> tokens = new ArrayList<>();
+        for(int i = 0; i < userId.size(); i++){
+            FcmResponse fcm = new FcmResponse();
+            fcm = notificationClient.getFCMDetails(Long.valueOf(userId.get(i)));
+            Notification notification = fcm.getFcmTokens().get(i);
+            tokens.add(notification.getFcmToken());
+        }
+
+        notificationService.sendPushNotification(tokens, request);
+
+
+        }
 
     @PostMapping("/addQuiz")
     @KafkaListener(topics = "QuizListener", groupId = "group_id")
@@ -81,6 +87,7 @@ public class PushNotificationController {
         details.setContestTimeLimit(endDate);
         QuizRequest request = new QuizRequest();
         BeanUtils.copyProperties(quizDTO, request);
+        notificationClient.getFCMDetails(1L);
         List <String> tokens = quizDTO.getContestDetails().entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toList());
         notificationService.sendQuizNotification(tokens, request, details);
 
