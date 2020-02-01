@@ -20,31 +20,33 @@ public class KafkaConsumers {
 //    public void fbConsumer(@RequestBody String message) {
 //
 //       ObjectMapper objectMapper = new ObjectMapper();
-//        SocialDTO socialDTO = new SocialDTO();
+//        QuoraDTO socialDTO = new QuoraDTO();
 //        try {
-//            socialDTO = objectMapper.readValue(message, SocialDTO.class);
+//            socialDTO = objectMapper.readValue(message, QuoraDTO.class);
 //        } catch (IOException e) {
 //            e.printStackTrace();
 //        }
-//        List<String>userId = socialDTO.getUserId().entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toList());
+//        List<String>userId = new ArrayList<>();
+//        userId.addAll(socialDTO.getUserId().stream().collect(Collectors.toList()));
 //        PushNotificationRequest request = new PushNotificationRequest();
 //        BeanUtils.copyProperties(socialDTO, request);
-//        Notification users = new Notification();
-////        for (int i = 0; i < users.size(); i++) {
-////            Notification user = new Notification();
-////            user.setUserId(users.get(i));
-//            List<String> tokens = new ArrayList<>();
-////            Notification u = (userIdRedisRepository.findTokens(user.getUserId()));
-////            tokens.addAll(u.getFCMTokens());
-////            notificationService.sendPushNotification(tokens, request);
-//            tokens.add(userId.get(0));
-//            notificationService.sendPushNotification(tokens, request);
+//
+//        List<String> tokens = new ArrayList<>();
+//        for(int i = 0; i < userId.size(); i++){
+//            FcmResponse fcm = new FcmResponse();
+//            fcm = notificationClient.getFCMDetails(Long.valueOf(userId.get(i)));
+//            Notification notification = fcm.getFcmTokens().get(i);
+//            tokens.add(notification.getFcmToken());
+//        }
+//        request.setMessage("On application " + socialDTO.getAppId() + " for category " + socialDTO.getCategory());
+//
+//        notificationService.sendPushNotification(tokens, request);
 //    }
 
-    @KafkaListener(topics = "QuizListener", groupId = "group_id")
-    public void quizConsumer(@RequestBody String message) {
+//    @KafkaListener(topics = "QuizListener", groupId = "group_id",containerFactory = "kafkaListenerContainerFactoryQuiz")
+//    public void quizConsumer(@RequestBody String message) {
 
-    }
+ //   }
 
     //todo : keep the common code base .. remove the commted lines of code
 

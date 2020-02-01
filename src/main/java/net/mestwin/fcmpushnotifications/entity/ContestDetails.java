@@ -14,7 +14,7 @@ import java.util.Map;
 public class ContestDetails {
 
     //private String contestId;
-    private Map<String, String> userId;
+    private List<String> userId;
     //private String categoryId;
     private String contestName;
     private Date contestTimeLimit;

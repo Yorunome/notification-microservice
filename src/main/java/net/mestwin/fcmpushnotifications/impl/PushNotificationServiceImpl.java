@@ -10,6 +10,7 @@ import net.mestwin.fcmpushnotifications.model.QuizRequest;
 import net.mestwin.fcmpushnotifications.service.PushNotificationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -64,6 +65,7 @@ public class PushNotificationServiceImpl implements PushNotificationService {
     }
 
     @Override
+    @Scheduled
     public void sendQuizNotification(List<String> tokens, QuizRequest request, ContestDetails details) {
 
         MulticastMessage message = MulticastMessage.builder()

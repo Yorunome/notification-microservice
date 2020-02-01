@@ -1,10 +1,12 @@
 package net.mestwin.fcmpushnotifications;
 
+import net.mestwin.fcmpushnotifications.config.KafkaConfigQuora;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 
-@SpringBootApplication()
+@SpringBootApplication
 @EnableFeignClients
 public class FcmPushNotificationsApplication {
 
