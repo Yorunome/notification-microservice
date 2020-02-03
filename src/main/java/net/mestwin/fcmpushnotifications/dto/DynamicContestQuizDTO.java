@@ -12,13 +12,12 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class QuizDTO {
+public class DynamicContestQuizDTO {
 
     private String appId;
-    private String title;
+    private String title; ///question start,question end,question remove,quiz end
     private String message;
-    //private Map<String, String> contestDetails;
+    private String questionId;
+    private String contestId;
     private List<String> userId;
-    private Date notificationSendTime;
-
 }

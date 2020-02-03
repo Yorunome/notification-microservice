@@ -1,7 +1,6 @@
 package net.mestwin.fcmpushnotifications.config;
 
-import net.mestwin.fcmpushnotifications.dto.QuizDTO;
-import net.mestwin.fcmpushnotifications.dto.QuoraDTO;
+import net.mestwin.fcmpushnotifications.dto.DynamicContestQuizDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -22,8 +21,8 @@ public class KafkaConfigQuiz {
 
     @Bean
     @ConditionalOnMissingBean(name = "QuizKafkaListenerContainerFactory")
-    public ConsumerFactory<String, QuizDTO> quizConsumerKafka() {
-        JsonDeserializer<QuizDTO> deserializer = new JsonDeserializer<>(QuizDTO.class);
+    public ConsumerFactory<String, DynamicContestQuizDTO> quizConsumerKafka() {
+        JsonDeserializer<DynamicContestQuizDTO> deserializer = new JsonDeserializer<>(DynamicContestQuizDTO.class);
         deserializer.setRemoveTypeHeaders(false);
         deserializer.addTrustedPackages("*");
         deserializer.setUseTypeMapperForKey(true);
@@ -34,11 +33,11 @@ public class KafkaConfigQuiz {
         //config.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);
-        return new DefaultKafkaConsumerFactory<String, QuizDTO>(config, new StringDeserializer(), deserializer);
+        return new DefaultKafkaConsumerFactory<String, DynamicContestQuizDTO>(config, new StringDeserializer(), deserializer);
     }
     @Bean(name="QuizKafkaListenerContainerFactory")
-    public ConcurrentKafkaListenerContainerFactory<String, QuizDTO> QuizKafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, QuizDTO> factory = new ConcurrentKafkaListenerContainerFactory<String, QuizDTO> ();
+    public ConcurrentKafkaListenerContainerFactory<String, DynamicContestQuizDTO> QuizKafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, DynamicContestQuizDTO> factory = new ConcurrentKafkaListenerContainerFactory<String, DynamicContestQuizDTO> ();
         factory.setConsumerFactory(quizConsumerKafka());
         return factory;
     }

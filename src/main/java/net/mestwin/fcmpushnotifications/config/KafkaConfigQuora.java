@@ -1,6 +1,5 @@
 package net.mestwin.fcmpushnotifications.config;
 
-import net.mestwin.fcmpushnotifications.dto.QuizDTO;
 import net.mestwin.fcmpushnotifications.dto.QuoraDTO;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;

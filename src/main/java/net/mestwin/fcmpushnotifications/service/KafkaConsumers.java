@@ -2,6 +2,7 @@ package net.mestwin.fcmpushnotifications.service;
 
 import net.mestwin.fcmpushnotifications.feignclient.NotificationClient;
 import net.mestwin.fcmpushnotifications.impl.PushNotificationServiceImpl;
+import net.mestwin.fcmpushnotifications.impl.SlackNotificationImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 public class KafkaConsumers {
 
     @Autowired
-    PushNotificationServiceImpl notificationService;
+    private PushNotificationService notificationService;
+
+    @Autowired
+    private NotificationClient notificationClient;
+
+    @Autowired
+    private SlackNotificationImpl slackNotification;
 
 //    @Autowired
 //    NotificationClient notificationClient;
